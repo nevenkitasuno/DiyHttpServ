@@ -1,0 +1,21 @@
+# @import ./CommonOptions.http
+
+// Test compression support of HTTP server.
+// https://en.wikipedia.org/wiki/HTTP_compression
+
+// Compression headers
+
+GET http://localhost:{{port}}/echo/abc
+Accept-Encoding: gzip
+// Client specifies it supports the gzip compression scheme.
+?? status == 200
+?? header Content-Encoding == gzip
+
+// Multiple compression schemes
+
+GET http://localhost:{{port}}/echo/abc
+Accept-Encoding: invalid-encoding-1, gzip, invalid-encoding-2
+?? status == 200
+?? header Content-Encoding == gzip
+
+// Content-Encoding header not exists if no "gzip" in Accept-Encoding test not implemented yet.

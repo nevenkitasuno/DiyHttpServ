@@ -1,0 +1,33 @@
+# @import ./CommonOptions.http
+
+// Connect, respond with 200
+GET http://localhost:{{port}}
+// ?? status == 200
+
+// Extract URL path
+GET http://localhost:{{port}}/abcdefg
+?? status == 404
+
+// Respond with body. Endpoint "/echo/{str}" responds with {str} in body.
+GET http://localhost:{{port}}/echo/abc
+?? status == 200
+?? body == abc
+
+GET http://localhost:{{port}}/echo/lalala
+?? status == 200
+?? body == lalala
+
+// Read header. Endpoint "/user-agent/" responds with User-Agent value in body. Header names are case-insensitive
+GET http://localhost:{{port}}/user-agent
+User-Agent: foobar/1.2.3
+?? status == 200
+?? body == foobar/1.2.3
+
+GET http://localhost:{{port}}/user-agent
+user-AGENT: foobar/1.2.3
+?? status == 200
+?? body == foobar/1.2.3
+
+// Concurrent connections test: not implemented yet.
+
+// Return a file: not implemented yet
